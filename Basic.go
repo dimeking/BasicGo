@@ -8,12 +8,13 @@ import (
 )
 
 func generateRandomIntArray() []int {
-	const MAX_SIZE = 10000
-	const MAX_VALUE = 1000
-	// TODO:: random size
-	intArray := [MAX_SIZE]int{}
+	const MAX_SIZE = 1000
+	const MAX_VALUE = 100
 
 	rand.Seed(time.Now().UnixNano())
+	size := rand.Intn(MAX_SIZE)
+	intArray := make([]int, size)
+
 	for i := 0; i < len(intArray); i++ {
 		intArray[i] = rand.Intn(MAX_VALUE)
 	}
