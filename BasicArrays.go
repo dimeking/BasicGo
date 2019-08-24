@@ -1,4 +1,4 @@
-package basic
+package main
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func randomArrayProps() {
+func randomArrayProperties() {
 	intArray := generateRandomIntArray()
 	// fmt.Println("Random Array: ", intArray)
 	fmt.Println("Random Array Size: ", len(intArray))
@@ -24,8 +24,6 @@ func randomArrayProps() {
 }
 
 func generateRandomIntArray() []int {
-	const MAX_SIZE = 1000
-	const MAX_VALUE = 100
 
 	rand.Seed(time.Now().UnixNano())
 	size := rand.Intn(MAX_SIZE)

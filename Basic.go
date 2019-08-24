@@ -1,5 +1,10 @@
-package basic
+package main
+
+const MAX_SIZE = 100
+const MAX_VALUE = 1000
 
 func main() {
-	randomArrayProps()
+	randomArrayProperties()
+
+	randomListProperties()
 }
