@@ -7,4 +7,6 @@ func main() {
 	randomArrayProperties()
 
 	randomListProperties()
+
+	randomTreeProperties()
 }
