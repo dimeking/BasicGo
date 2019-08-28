@@ -19,9 +19,11 @@ func randomListProperties() {
 	len := getListLength(list)
 	fmt.Println("Random List Length: ", len)
 
+	start := time.Now()
 	mean := calculateListMean(list)
 	fmt.Println("Random List Mean: ", mean)
-
+	elapsed := time.Since(start)
+	fmt.Println("Normal Calculate Random List Mean in: ", elapsed.String())
 }
 
 func generateRandomList() *Node {

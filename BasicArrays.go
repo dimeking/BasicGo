@@ -12,8 +12,11 @@ func randomArrayProperties() {
 	// fmt.Println("Random Array: ", intArray)
 	fmt.Println("Random Array Size: ", len(intArray))
 
+	start := time.Now()
 	mean := calculateMean(intArray)
 	fmt.Println("Random Array Mean: ", mean)
+	elapsed := time.Since(start)
+	fmt.Println("Normal Calculate Random Array Mean in: ", elapsed.String())
 
 	median := calculateMedian(intArray)
 	fmt.Println("Random Array Median: ", median)

@@ -6,8 +6,9 @@ import (
 	"time"
 )
 
-const MAX_BRANCH = 12
-const MAX_DEPTH = 12
+const MAX_TREES = 64
+const MAX_BRANCH = 10
+const MAX_DEPTH = 10
 
 type TreeNode struct {
 	value    int
@@ -19,17 +20,45 @@ func randomTreeProperties() {
 	rand.Seed(time.Now().UnixNano())
 	depth := rand.Intn(MAX_DEPTH-1) + 1
 
+	treeChArray := make([]chan *TreeNode, MAX_TREES)
+	treeArray := make([]*TreeNode, MAX_TREES)
+	meanChArray := make([]chan float64, MAX_TREES)
+
 	start := time.Now()
-	var tree = generateRandomTree(depth)
+	for n := 0; n < MAX_TREES; n++ {
+		treeChArray[n] = make(chan *TreeNode)
+		go genRandomTree(depth, treeChArray[n])
+	}
+	for n := 0; n < MAX_TREES; n++ {
+		treeArray[n] = <-treeChArray[n]
+	}
 	elapsed := time.Since(start)
-	fmt.Println("Generated Random Tree in: ", elapsed.String())
+	fmt.Println("Generated Random Trees in: ", elapsed.String())
 
 	start = time.Now()
-	mean := calculateTreeMean(tree)
+	for n := 0; n < MAX_TREES; n++ {
+		meanChArray[n] = make(chan float64)
+		go calcTreeMean(treeArray[n], meanChArray[n])
+	}
+	for n := 0; n < MAX_TREES; n++ {
+		<-meanChArray[n]
+		// fmt.Println("Random Tree Mean: ", mean)
+	}
 	elapsed = time.Since(start)
-	fmt.Println("Random Tree Mean: ", mean)
-	fmt.Println("Calculated Random Tree Mean in: ", elapsed.String())
+	fmt.Println("Concurrent Calculate Random Tree Means in: ", elapsed.String())
 
+	start = time.Now()
+	for n := 0; n < MAX_TREES; n++ {
+		calculateTreeMean(treeArray[n])
+		// fmt.Println("Random Tree Mean: ", mean)
+	}
+	elapsed = time.Since(start)
+	fmt.Println("Normal Calculated Random Tree Means in: ", elapsed.String())
+}
+
+func genRandomTree(depth int, tCh chan *TreeNode) {
+	tree := generateRandomTree(depth)
+	tCh <- tree
 }
 
 func generateRandomTree(depth int) *TreeNode {
@@ -86,6 +115,11 @@ func traverseTree(node *TreeNode, property func(node *TreeNode) int) int {
 	}
 
 	return prop_val
+}
+
+func calcTreeMean(tree *TreeNode, meanCh chan float64) {
+	mean := calculateTreeMean(tree)
+	meanCh <- mean
 }
 
 func calculateTreeMean(tree *TreeNode) float64 {
