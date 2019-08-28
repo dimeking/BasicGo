@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-const MAX_BRANCH = 10
-const MAX_DEPTH = 10
+const MAX_BRANCH = 12
+const MAX_DEPTH = 12
 
 type TreeNode struct {
 	value    int
@@ -19,12 +19,17 @@ func randomTreeProperties() {
 	rand.Seed(time.Now().UnixNano())
 	depth := rand.Intn(MAX_DEPTH-1) + 1
 
-	// fmt.Println("Generating Random Tree...")
+	start := time.Now()
 	var tree = generateRandomTree(depth)
+	elapsed := time.Since(start)
+	fmt.Println("Generated Random Tree in: ", elapsed.String())
 
-	// fmt.Println("Calculating Random Tree Properties...")
+	start = time.Now()
 	mean := calculateTreeMean(tree)
+	elapsed = time.Since(start)
 	fmt.Println("Random Tree Mean: ", mean)
+	fmt.Println("Calculated Random Tree Mean in: ", elapsed.String())
+
 }
 
 func generateRandomTree(depth int) *TreeNode {
